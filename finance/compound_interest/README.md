@@ -1,26 +1,32 @@
 # Compound Interest
 
-First financial concept planned for the video engine.
+## Mathematical model
 
-Core model:
+A(t) = P(1+r)^t
 
-**A(t) = P(1+r)^t**
+The model is deliberately isolated from rendering. A renderer receives values
+from this model; it does not calculate financial truth itself.
 
-Visual story:
+## First visual experiment
 
-1. Start with principal.
-2. Apply one growth period.
-3. Add earned growth to the next base.
-4. Repeat.
-5. Compare with simple interest.
-6. Make the effect of time visible.
+Compare:
 
-Planned visual vocabulary:
+- simple interest: P(1 + rt)
+- compound interest: P(1 + r)^t
+
+The first animation should show the same starting principal and the two growth
+mechanisms diverging over time.
+
+## Visual vocabulary
 
 - particles for money
-- recursive growth
+- recursive reinvestment
 - exponential curve
 - timeline
-- side-by-side comparison
+- accumulated area
 
-The numerical model must remain independent from rendering.
+## Implementation
+
+The numerical model lives in:
+
+engine/models/compound_interest.py

@@ -1,33 +1,46 @@
-# Procedural Art Experiments
+# Mathematical Art Experiments
 
-Experiments are numbered in the order we expect to study them.
+The experiments are a dependency-light laboratory for reusable visual primitives.
 
-01 Geometry
-- parametric curves
-- polar coordinates
-- radial repetition
+## Primitive families
 
-02 Noise
-- seeded randomness
-- smooth fields
-- multi-scale structure
+01. Geometry
+02. Noise
+03. Flow fields
+04. Fractals
+05. L-systems
+06. Particles
+07. Parametric curves
+08. Transformations and symmetry
+09. Probability and random processes
+10. Spatial geometry / Voronoi
+11. Graphs and networks
+12. Dynamical systems
+13. Waves and signal composition
+14. Signed distance fields
+15. Optimization
+16. Number-theoretic patterns
+17. Cellular automata
+18. Distance / potential fields
+19. Trigonometric patterns
+20. Combinatorics
+21. Chaos
+22. Interpolation
+23. 3D geometry
+24. Recursive subdivision
+25. Financial mappings
+26. Calculus
+27. Linear algebra
+28. Fourier analysis
+29. Grids and tilings
+30. Simplex / barycentric geometry
 
-03 Flow Fields
-- vector fields
-- numerical integration
-- trajectories
+## Design rules
 
-04 Fractals
-- recursive geometry
-- self-similarity
+- Keep primitives dependency-light.
+- Prefer deterministic output; expose seeds for controlled randomness.
+- Keep mathematics separate from rendering.
+- Make functions composable.
+- Promote stable primitives into engine/ only after experimentation.
 
-05 L-Systems
-- symbolic rewriting
-- branching structures
-
-06 Particles
-- particle state
-- trajectories
-- flow-based motion
-
-The goal is to discover reusable visual primitives before coupling them to finance or video rendering.
+These primitives are the vocabulary layer for future Scene IR, Manim, Motion Canvas, and financial concept generators.

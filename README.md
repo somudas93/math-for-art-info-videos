@@ -23,6 +23,16 @@ The financial model is the source of truth. Artistic rendering must never silent
 
 **model → calculation → visualization → narration → style**
 
+## Iteration 1 — Foundation
+
+This first iteration is intentionally small. It establishes the repository structure and three renderer-independent procedural primitives:
+
+- geometry
+- flow fields
+- particles
+
+These are the baseline for future financial visualizations.
+
 ## Status
 
-Early research / scratch space.
+Iteration 1 complete. Future iterations can expand the mathematical-art library, financial models, renderers, and narration pipeline without changing this baseline.

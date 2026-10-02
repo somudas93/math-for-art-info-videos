@@ -12,13 +12,13 @@ from renderers.manim.primitives import render_object
 class ManimRenderer(Renderer):
     name = "manim"
 
-    def build_objects(self, scene: Scene, target: Any | None = None) -> dict[str, Any]:
+    def build_objects(self, scene: Scene) -> dict[str, Any]:
         objects: dict[str, Any] = {}
 
         timeline = next((obj for obj in scene.objects if obj.kind == "timeline"), None)
         axes = render_object(None, timeline) if timeline else None
 
-        if axes is not None:
+        if timeline is not None and axes is not None:
             objects[timeline.id] = axes
 
         for obj in scene.objects:
@@ -32,14 +32,15 @@ class ManimRenderer(Renderer):
         return objects
 
     def render(self, scene: Scene, target: Any) -> None:
-        objects = self.build_objects(scene, target)
+        objects = self.build_objects(scene)
 
         for spec in scene.animation.animations:
             apply_animation(target, spec, objects)
 
-        target.wait(max(0.0, scene.duration - sum(
-            spec.duration + spec.delay for spec in scene.animation.animations
-        )))
+        elapsed = sum(spec.duration + spec.delay for spec in scene.animation.animations)
+        remaining = max(0.0, scene.duration - elapsed)
+        if remaining:
+            target.wait(remaining)
 
 
 def renderer() -> ManimRenderer:

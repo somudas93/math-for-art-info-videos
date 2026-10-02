@@ -8,7 +8,7 @@ from engine.vocabulary import AnimationAction, Easing
 @dataclass(frozen=True)
 class AnimationSpec:
     action: str
-    target: str
+    target: str = ""
     duration: float = 1.0
     delay: float = 0.0
     easing: str = "linear"
@@ -29,7 +29,7 @@ class AnimationPlan:
     def add(
         self,
         action: str | AnimationAction,
-        target: str,
+        target: str = "",
         duration: float = 1.0,
         delay: float = 0.0,
         easing: str | Easing = Easing.LINEAR,

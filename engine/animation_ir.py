@@ -1,7 +1,8 @@
-"""Renderer-neutral animation and style specifications."""
+"""Renderer-neutral animation specifications."""
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
+from engine.style_ir import StyleSpec
 from engine.vocabulary import AnimationAction, Easing
 
 
@@ -12,12 +13,6 @@ class AnimationSpec:
     duration: float = 1.0
     delay: float = 0.0
     easing: str = "linear"
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass(frozen=True)
-class StyleSpec:
-    name: str = "default"
     data: Dict[str, Any] = field(default_factory=dict)
 
 

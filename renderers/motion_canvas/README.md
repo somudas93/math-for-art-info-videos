@@ -3,26 +3,55 @@
 The Motion Canvas adapter consumes the same renderer-neutral Scene IR,
 Animation IR, and Style IR used by the Manim adapter.
 
-## Data flow
+## First scene: compound interest
 
-financial model → Scene IR → JSON → Motion Canvas
+The first end-to-end scene is:
+
+```text
+CompoundInterest model
+        ↓
+compound_interest_scene.py
+        ↓
+Scene IR
+        ↓
+compound_interest.json
+        ↓
+Motion Canvas
+```
+
+Entry point:
+
+```text
+src/compound_interest.ts
+```
+
+The scene uses the existing `CompoundInterest(1000, 0.08, 30)` model and
+renders the timeline, growth curve, money particles, and formula.
+
+## Regenerate scene data
+
+From the repository root:
+
+```bash
+python renderers/motion_canvas/export_compound_interest.py
+```
+
+This regenerates:
+
+```text
+renderers/motion_canvas/data/compound_interest.json
+```
 
 Python remains the source of truth for financial calculations. Motion Canvas
 only turns serialized scene semantics into visual objects and animation.
 
-## Bridge
+## Motion Canvas project
 
-Use `engine.serialization.scene_to_json()` to export a generated scene:
+Copy the `renderers/motion_canvas` directory into a Motion Canvas 3.x
+project, or use its source files as the renderer package.
 
-```python
-from engine.generators.compound_interest_scene import build_scene
-from engine.serialization import scene_to_json
-
-print(scene_to_json(build_scene()))
-```
-
-Save that JSON into the Motion Canvas project as scene data. The TypeScript
-adapter accepts the resulting object.
+The scene can then be registered as the project's entry scene using the normal
+Motion Canvas project configuration.
 
 ## Current coverage
 

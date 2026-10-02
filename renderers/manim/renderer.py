@@ -21,13 +21,19 @@ class ManimRenderer(Renderer):
         if timeline is not None and axes is not None:
             objects[timeline.id] = axes
 
+        # Render independent objects first.
         for obj in scene.objects:
-            if obj.id in objects:
+            if obj.id in objects or obj.kind == "group":
                 continue
 
-            rendered = render_object(axes, obj)
+            rendered = render_object(axes, obj, objects)
             if rendered is not None:
                 objects[obj.id] = rendered
+
+        # Groups can now reference already-rendered object ids.
+        for obj in scene.objects:
+            if obj.kind == "group":
+                objects[obj.id] = render_object(axes, obj, objects)
 
         return objects
 

@@ -2,6 +2,7 @@
 from engine.animation_ir import AnimationAction
 from engine.models.compound_interest import CompoundInterest
 from engine.scene_ir import Scene
+from engine.style_ir import StyleSpec
 from engine.vocabulary import Easing, ObjectKind
 
 
@@ -13,54 +14,45 @@ def build_scene(principal=1000.0, annual_rate=0.08, periods=30) -> Scene:
     y_step = max(principal, y_max / 5.0)
 
     scene = Scene("compound_interest", duration=10.0)
+    scene.animation.style = StyleSpec(
+        name="finance",
+        font_size=32,
+        stroke_width=3,
+        opacity=1.0,
+        fill_opacity=1.0,
+    )
+
     scene.add(
-        ObjectKind.TIMELINE,
-        "timeline",
-        start=0,
-        end=periods,
-        y_min=0,
-        y_max=y_max,
-        y_step=y_step,
+        ObjectKind.TIMELINE, "timeline",
+        start=0, end=periods, y_min=0, y_max=y_max, y_step=y_step,
     )
     scene.add(
-        ObjectKind.CURVE,
-        "growth_curve",
+        ObjectKind.CURVE, "growth_curve",
         points=[(t, value) for t, value in enumerate(values)],
     )
     scene.add(
-        ObjectKind.PARTICLES,
-        "money_particles",
-        count=len(values),
-        values=values,
+        ObjectKind.PARTICLES, "money_particles",
+        count=len(values), values=values,
     )
     scene.add(
-        ObjectKind.LABEL,
-        "formula",
-        text=r"A(t)=P(1+r)^t",
-        position=[0, 3, 0],
+        ObjectKind.LABEL, "formula",
+        text=r"A(t)=P(1+r)^t", position=[0, 3, 0],
     )
 
     scene.animation.add(
-        AnimationAction.CREATE,
-        "timeline",
-        duration=1.5,
-        easing=Easing.SMOOTH,
+        AnimationAction.CREATE, "timeline",
+        duration=1.5, easing=Easing.SMOOTH,
     )
     scene.animation.add(
-        AnimationAction.FADE_IN,
-        "formula",
-        duration=0.8,
-        delay=0.2,
+        AnimationAction.FADE_IN, "formula",
+        duration=0.8, delay=0.2,
     )
     scene.animation.add(
-        AnimationAction.DRAW,
-        "growth_curve",
-        duration=3.0,
-        easing=Easing.SMOOTH,
+        AnimationAction.DRAW, "growth_curve",
+        duration=3.0, easing=Easing.SMOOTH,
     )
     scene.animation.add(
-        AnimationAction.GROW,
-        "money_particles",
+        AnimationAction.GROW, "money_particles",
         duration=2.0,
     )
     return scene

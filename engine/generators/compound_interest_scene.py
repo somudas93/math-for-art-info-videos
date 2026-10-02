@@ -33,7 +33,12 @@ def build_scene(principal=1000.0, annual_rate=0.08, periods=30) -> Scene:
         count=len(values),
         values=values,
     )
-    scene.add(ObjectKind.LABEL, "formula", text=r"A(t)=P(1+r)^t")
+    scene.add(
+        ObjectKind.LABEL,
+        "formula",
+        text=r"A(t)=P(1+r)^t",
+        position=[0, 3, 0],
+    )
 
     scene.animation.add(
         AnimationAction.CREATE,

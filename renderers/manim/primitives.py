@@ -1,8 +1,7 @@
 """Reusable Manim primitives for Scene IR objects."""
 from __future__ import annotations
 
-import math
-from typing import Any, Iterable
+from typing import Any
 
 from manim import Axes, Circle, Dot, Line, MathTex, Rectangle, Text, VGroup, VMobject
 
@@ -59,9 +58,7 @@ def render_label(obj):
 
 
 def render_line(obj):
-    start = obj.data["start"]
-    end = obj.data["end"]
-    return Line(start, end)
+    return Line(obj.data["start"], obj.data["end"])
 
 
 def render_circle(obj):
@@ -75,29 +72,35 @@ def render_rectangle(obj):
     )
 
 
-def render_group(axes, obj):
-    children = obj.data.get("objects", [])
-    if not isinstance(children, Iterable):
-        raise ValueError("group.objects must be iterable")
-    return VGroup(*children)
+def render_group(obj, objects: dict[str, Any]):
+    child_ids = obj.data.get("children", [])
+    missing = [child_id for child_id in child_ids if child_id not in objects]
+    if missing:
+        raise ValueError(f"group '{obj.id}' references missing objects: {missing}")
+    return VGroup(*(objects[child_id] for child_id in child_ids))
 
 
-def render_object(axes: Any, obj):
+def render_object(axes: Any, obj, objects: dict[str, Any] | None = None):
     if obj is None:
         return None
 
-    renderers = {
-        "timeline": render_timeline,
-        "curve": lambda item: render_curve(axes, item),
-        "particles": lambda item: render_particles(axes, item),
-        "label": render_label,
-        "line": render_line,
-        "circle": render_circle,
-        "rectangle": render_rectangle,
-        "group": lambda item: render_group(axes, item),
-    }
+    if obj.kind == "timeline":
+        return render_timeline(obj)
+    if obj.kind == "curve":
+        return render_curve(axes, obj)
+    if obj.kind == "particles":
+        return render_particles(axes, obj)
+    if obj.kind == "label":
+        return render_label(obj)
+    if obj.kind == "line":
+        return render_line(obj)
+    if obj.kind == "circle":
+        return render_circle(obj)
+    if obj.kind == "rectangle":
+        return render_rectangle(obj)
+    if obj.kind == "group":
+        if objects is None:
+            raise ValueError("group rendering requires the rendered object registry")
+        return render_group(obj, objects)
 
-    renderer = renderers.get(obj.kind)
-    if renderer is None:
-        return None
-    return renderer(obj)
+    raise ValueError(f"Unsupported SceneObject kind: {obj.kind}")

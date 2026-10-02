@@ -1,0 +1,9 @@
+{
+  "name": "@math-for-art/motion-canvas-renderer",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@motion-canvas/2d": "^3.17.0",
+    "@motion-canvas/core": "^3.17.0"
+  }
+}

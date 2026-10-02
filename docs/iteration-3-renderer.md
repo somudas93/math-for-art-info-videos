@@ -1,38 +1,45 @@
 # Iteration 3 — Renderer Layer
 
-The renderer layer is separated from mathematical models, Scene IR, and Animation IR.
+The renderer layer is separated from mathematical models, Scene IR, Animation IR, and Style IR.
 
 ```text
-financial model → Scene IR → Animation IR → renderer → video
+financial model → Scene IR → Animation IR + Style IR → renderer → video
 ```
 
 ## Renderer library
 
-The reusable renderer library now contains:
+The reusable renderer library contains:
 
 - `renderers/base.py` — common renderer interface
 - `renderers/registry.py` — named, lazy-loaded renderer registry
 - `renderers/manim/primitives.py` — reusable Manim object mappings
 - `renderers/manim/animation.py` — reusable Manim animation mappings
+- `renderers/manim/style.py` — Manim implementation of Style IR
 - `renderers/manim/renderer.py` — complete Scene renderer
 - `renderers/manim/compound_interest.py` — thin executable entry point
 
-## Boundary
+## Style boundary
 
-The renderer may control:
+Style is renderer-neutral:
 
-- timing
-- animation
-- camera
-- typography
-- visual style
+- font
+- font size
+- stroke width
+- stroke
+- fill
+- opacity
+- fill opacity
+- scale
+- named style preset
 
-It must not change or recalculate the numerical model.
+The Manim adapter decides how those properties map to Manim APIs.
+
+Financial models never depend on style or rendering.
 
 ## Result
 
-A financial scene generator can now stay completely unaware of Manim. A future Motion Canvas renderer can consume the same IR and implement the same vocabulary independently.
+A financial scene generator can stay completely unaware of Manim. A future Motion Canvas renderer can consume the same Scene IR + Animation IR + Style IR and implement the same visual vocabulary independently.
 
 ## Next
 
-Build reusable style specifications and then add the Motion Canvas adapter against the same Scene IR + Animation IR.
+Add the Motion Canvas adapter against the same IR, then build a small style library for financial visual language.

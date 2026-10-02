@@ -7,6 +7,7 @@ from engine.scene_ir import Scene
 from renderers.base import Renderer
 from renderers.manim.animation import apply_animation
 from renderers.manim.primitives import render_object
+from renderers.manim.style import apply_style
 
 
 class ManimRenderer(Renderer):
@@ -14,32 +15,30 @@ class ManimRenderer(Renderer):
 
     def build_objects(self, scene: Scene) -> dict[str, Any]:
         objects: dict[str, Any] = {}
-
         timeline = next((obj for obj in scene.objects if obj.kind == "timeline"), None)
         axes = render_object(None, timeline) if timeline else None
 
         if timeline is not None and axes is not None:
-            objects[timeline.id] = axes
+            objects[timeline.id] = apply_style(axes, scene.animation.style)
 
-        # Render independent objects first.
         for obj in scene.objects:
             if obj.id in objects or obj.kind == "group":
                 continue
-
             rendered = render_object(axes, obj, objects)
             if rendered is not None:
-                objects[obj.id] = rendered
+                objects[obj.id] = apply_style(rendered, scene.animation.style)
 
-        # Groups can now reference already-rendered object ids.
         for obj in scene.objects:
             if obj.kind == "group":
-                objects[obj.id] = render_object(axes, obj, objects)
+                objects[obj.id] = apply_style(
+                    render_object(axes, obj, objects),
+                    scene.animation.style,
+                )
 
         return objects
 
     def render(self, scene: Scene, target: Any) -> None:
         objects = self.build_objects(scene)
-
         for spec in scene.animation.animations:
             apply_animation(target, spec, objects)
 

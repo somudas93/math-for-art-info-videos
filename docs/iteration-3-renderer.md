@@ -17,29 +17,37 @@ The reusable renderer library contains:
 - `renderers/manim/style.py` — Manim implementation of Style IR
 - `renderers/manim/renderer.py` — complete Scene renderer
 - `renderers/manim/compound_interest.py` — thin executable entry point
+- `engine/serialization.py` — JSON bridge for non-Python renderers
+- `renderers/motion_canvas/` — Motion Canvas TypeScript adapter
 
-## Style boundary
+## Motion Canvas adapter
 
-Style is renderer-neutral:
+Motion Canvas consumes the same serialized Scene IR rather than a second financial model.
 
-- font
-- font size
-- stroke width
-- stroke
-- fill
-- opacity
-- fill opacity
-- scale
-- named style preset
+The adapter currently covers:
 
-The Manim adapter decides how those properties map to Manim APIs.
+- object kinds: timeline, curve, particles, label, line, circle, rectangle, group
+- animation actions: create, draw, grow, fade in/out, highlight, move, transform, wait
+- portable style properties such as opacity, scale, fill, stroke, and stroke width
 
-Financial models never depend on style or rendering.
+This makes the renderer boundary explicit:
+
+```text
+Python financial model
+        ↓
+Python Scene IR
+        ↓
+      JSON
+        ↓
+Motion Canvas TypeScript
+        ↓
+       video
+```
 
 ## Result
 
-A financial scene generator can stay completely unaware of Manim. A future Motion Canvas renderer can consume the same Scene IR + Animation IR + Style IR and implement the same visual vocabulary independently.
+A financial scene generator stays unaware of the concrete animation framework. Manim and Motion Canvas can consume the same mathematical scene description without changing financial calculations.
 
 ## Next
 
-Add the Motion Canvas adapter against the same IR, then build a small style library for financial visual language.
+Build a small shared style library and add a first end-to-end compound-interest render in Motion Canvas.

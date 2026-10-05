@@ -26,7 +26,7 @@ _VISUAL_OBJECTS = {
     "distribution": ("curve", "particles"),
     "coupled_trajectories": ("curve", "line", "particles"),
     "correlated_paths": ("curve", "particles"),
-    "simplex": ("triangle", "particles", "label"),
+    "simplex": ("line", "particles", "label"),
     "network": ("circle", "line", "particles"),
     "flow_field": ("curve", "particles"),
     "graph": ("circle", "line", "label"),

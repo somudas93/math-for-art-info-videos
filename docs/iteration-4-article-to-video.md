@@ -277,3 +277,30 @@ prose.
 5. Add vertical 9:16 composition to the renderer layer.
 6. Add narration timing and subtitle tracks.
 7. Test the whole pipeline on one real J.P. Morgan Private Bank article.
+
+
+## 13. Implemented baseline
+
+The first runnable implementation is now in the repository:
+
+- `engine/article_ingest.py` — fetches an HTML article and extracts title, headings and usable paragraphs.
+- `engine/narrative_ir.py` — source, claim, beat and story contracts.
+- `engine/narrative_compiler.py` — deterministic source-grounded 90-second compiler.
+- `engine/visual_planner.py` — maps story beats to existing mathematical visual primitives.
+- `scripts/compile_article.py` — command-line entry point.
+
+Example:
+
+    python scripts/compile_article.py \
+      "https://example.com/article" \
+      --duration 90 \
+      --claims 5 \
+      --output story.json
+
+The baseline intentionally prefers conservative extraction and paraphrase over
+inventing facts. A semantic/LLM compiler can later replace the heuristic
+selection while producing the same Narrative IR.
+
+The next production step is to add an LLM-backed semantic compiler with
+structured output validation, followed by vertical Scene IR generation,
+subtitle timing and TTS.

@@ -19,6 +19,7 @@ class Scene:
     duration: float = 8.0
     objects: List[SceneObject] = field(default_factory=list)
     animation: AnimationPlan = field(default_factory=AnimationPlan)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def add(
         self,

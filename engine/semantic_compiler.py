@@ -33,6 +33,7 @@ class SemanticBeat:
 class SemanticStory:
     title: str
     thesis: str
+    claims: tuple[SemanticClaim, ...]
     beats: tuple[SemanticBeat, ...]
     disclaimer: str = "Source-grounded summary. Not investment advice."
 

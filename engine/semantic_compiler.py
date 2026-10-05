@@ -208,6 +208,7 @@ def validate_semantic_story(
 ) -> None:
     claim_ids = {claim.id for claim in story.claims}
     data_ids = {fact.id for fact in facts}
+    facts_by_id = {fact.id: fact for fact in facts}
 
     if not story.claims:
         raise ValueError("semantic compiler returned no claims")
@@ -220,6 +221,16 @@ def validate_semantic_story(
         missing = set(claim.data_ids) - data_ids
         if missing:
             raise ValueError(f"claim {claim.id} references unknown data: {sorted(missing)}")
+        wrong_paragraph = [
+            data_id
+            for data_id in claim.data_ids
+            if facts_by_id[data_id].paragraph_index != claim.source_paragraph
+        ]
+        if wrong_paragraph:
+            raise ValueError(
+                f"claim {claim.id} references data from another paragraph: "
+                f"{sorted(wrong_paragraph)}"
+            )
 
     for beat in story.beats:
         missing = set(beat.claim_ids) - claim_ids

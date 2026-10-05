@@ -36,3 +36,23 @@ These are the baseline for future financial visualizations.
 ## Status
 
 Iteration 1 complete. Future iterations can expand the mathematical-art library, financial models, renderers, and narration pipeline without changing this baseline.
+
+
+## Current pipeline status
+
+The repository now has a source-grounded semantic path in addition to the original mathematical-art and renderer layers:
+
+```
+Article URL
+  → article evidence
+  → numeric facts
+  → semantic claims / thesis
+  → financial model
+  → visual model
+  → Storyboard / Scene IR
+  → Manim / Motion Canvas
+```
+
+The financial model layer currently includes deterministic compound-growth and purchasing-power models. Model inputs retain numeric-fact provenance, and model-backed Scene objects carry calculated points instead of empty visual placeholders when sufficient evidence is available.
+
+See [Agents.md](Agents.md) for the complete architecture, agent conventions, iteration history, current limitations, and next implementation targets.

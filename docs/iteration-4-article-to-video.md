@@ -351,3 +351,67 @@ Example command:
 
 The resulting JSON contains both the source-grounded Story IR and the ordered
 Scene IR sequence.
+
+
+## 15. Semantic compiler + data extraction
+
+The production-oriented semantic path is now:
+
+    ArticleDocument
+        ↓
+    numeric fact extraction
+        ↓
+    evidence package
+        ↓
+    LLM semantic compiler
+        ↓
+    strict semantic validation
+        ↓
+    Narrative IR
+        ↓
+    Storyboard / Scene IR
+
+Added:
+
+- `engine/data_extraction.py` — extracts explicit numbers, percentages,
+  currencies, durations and years with source paragraph provenance.
+- `engine/semantic_compiler.py` — structured semantic compiler contract,
+  schema and provenance validation.
+- `engine/openai_responses.py` — optional OpenAI Responses API adapter.
+- `scripts/compile_semantic_video.py` — end-to-end semantic compiler CLI.
+
+The LLM is explicitly forbidden from inventing numerical facts. A numerical
+claim must reference a known `data_id`, and that data item must originate from
+the same source paragraph as the claim.
+
+The optional OpenAI adapter uses the Responses API with structured JSON output.
+The API has replaced the retired Assistants API for new integrations.
+See the official OpenAI migration documentation for the current Responses API
+workflow. 
+
+Environment:
+
+    OPENAI_API_KEY=...
+    OPENAI_MODEL=...
+
+Example:
+
+    python scripts/compile_semantic_video.py \
+      "https://example.com/article" \
+      --duration 90 \
+      --output semantic_storyboard.json
+
+The resulting artifact contains:
+
+    source article
+    + numeric evidence
+    + semantic Narrative IR
+    + Storyboard / Scene IR
+
+This creates an auditable chain:
+
+    source paragraph
+        → numeric fact
+        → claim
+        → narration beat
+        → visual scene

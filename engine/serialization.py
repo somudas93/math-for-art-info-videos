@@ -11,6 +11,7 @@ from enum import Enum
 from typing import Any
 
 from engine.scene_ir import Scene
+from engine.storyboard_ir import Storyboard
 
 
 def _json_value(value: Any) -> Any:

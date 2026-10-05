@@ -25,6 +25,8 @@ class Claim:
     importance: float = 1.0
     source: SourceReference | None = None
     factual: bool = True
+    data_refs: list[str] = field(default_factory=list)
+    source_paragraph: int | None = None
 
 
 @dataclass

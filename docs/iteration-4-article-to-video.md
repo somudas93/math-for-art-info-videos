@@ -304,3 +304,50 @@ selection while producing the same Narrative IR.
 The next production step is to add an LLM-backed semantic compiler with
 structured output validation, followed by vertical Scene IR generation,
 subtitle timing and TTS.
+
+
+## 14. Narrative → Scene IR bridge
+
+The Narrative IR is now connected to the renderer-neutral Scene IR through a
+Storyboard layer:
+
+    ShortFormStory
+        ↓
+    VisualPlanner
+        ↓
+    Storyboard
+        ↓
+    Scene IR (one scene per beat)
+        ↓
+    Manim / Motion Canvas
+
+Added:
+
+- `engine/storyboard_ir.py`
+- `engine/story_scene_compiler.py`
+- `engine/serialization.py` storyboard serialization
+- `scripts/compile_video_plan.py`
+
+Each generated Scene carries provenance metadata:
+
+- beat ID
+- beat purpose
+- narration
+- claim IDs
+- visual concept
+- source URL
+- story title
+
+Narration remains metadata rather than being baked into the visual layer. This
+creates a clean future connection to TTS and subtitle timing.
+
+Example command:
+
+    python scripts/compile_video_plan.py \
+      "https://example.com/article" \
+      --duration 90 \
+      --claims 5 \
+      --output storyboard.json
+
+The resulting JSON contains both the source-grounded Story IR and the ordered
+Scene IR sequence.
